@@ -9,6 +9,7 @@ import saladImg from '../../assets/menu/salad-bg.jpg'
 import soupImg from '../../assets/menu/soup-bg.jpg'
 import pizzaImg from '../../assets/menu/pizza-bg.jpg'
 
+// eslint-disable-next-line no-unused-vars
 const OrderMenu = ({items}) => {
     const [menu] = useMenu()
     const dessert = menu.filter(item => item.category === 'dessert')
@@ -29,11 +30,11 @@ const OrderMenu = ({items}) => {
             {/* offeerd menu items */}
             <MenuCetegory items={offered}></MenuCetegory>
             {/* dessert items */}
-            <MenuCetegory items={dessert} title='Dessert' img={dessertImg}></MenuCetegory>
+            <MenuCetegory items={dessert} title='dessert' img={dessertImg}></MenuCetegory>
             {/* salad items */}
-            <MenuCetegory img={saladImg} items={salad} title='Salad'></MenuCetegory>
-            <MenuCetegory items={soup} img={saladImg} title='Soup'></MenuCetegory>
-            <MenuCetegory items={pizza} img={pizzaImg} title='Pizza'></MenuCetegory>
+            <MenuCetegory img={saladImg} items={salad} title='salad'></MenuCetegory>
+            <MenuCetegory items={soup} img={soupImg} title='soup'></MenuCetegory>
+            <MenuCetegory items={pizza} img={pizzaImg} title='pizza'></MenuCetegory>
         </div>
     );
 };
