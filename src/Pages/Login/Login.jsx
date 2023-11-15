@@ -1,12 +1,17 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import  { useContext, useEffect, useRef, useState } from 'react';
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 import { AuthContext } from '../../Providers/AuthProvider';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import SocialLogin from '../../SocialLogin/SocialLigin';
+import Swal from 'sweetalert2';
 const LOgin = () => {
 
     const captchaRef = useRef(null)
     const [disabled, setDisabled] = useState(true)
+
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const { singin } = useContext(AuthContext)
 
@@ -15,16 +20,33 @@ const LOgin = () => {
     }, [])
 
 
+    const from = location.state?.from?.pathname || "/";
+    console.log('state in the location login page', location.state)
+
+    useEffect(() => {
+        loadCaptchaEnginge(6);
+    }, [])
+
     const handleLogin = event => {
-        event.preventDefault()
+        event.preventDefault();
         const form = event.target;
         const email = form.email.value;
         const password = form.password.value;
-        console.log(email, password)
+        console.log(email, password);
         singin(email, password)
             .then(result => {
-                const user = result.result
-                console.log(user)
+                const user = result.user;
+                console.log(user);
+                Swal.fire({
+                    title: 'User Login Successful.',
+                    showClass: {
+                        popup: 'animate__animated animate__fadeInDown'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutUp'
+                    }
+                });
+                navigate(from, { replace: true });
             })
     }
     const validedCaptcher = () => {
@@ -77,6 +99,7 @@ const LOgin = () => {
 
                                 <input disabled={disabled} className='btn btn-primary' type="submit" value="Login" />
                                 <p><small>New Here? <Link to='/singup'>Create an account</Link></small></p>
+                                <SocialLogin></SocialLogin>
                             </div>
                         </form>
 

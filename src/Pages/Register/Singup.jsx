@@ -1,14 +1,24 @@
+import { useContext } from "react";
 import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../Providers/AuthProvider";
+import SocialLogin from "../../SocialLogin/SocialLigin";
 
 
 
 const Singup = () => {
     const { register, handleSubmit, watch, formState: { errors }, } = useForm();
+
+    const {createUser} = useContext(AuthContext);
    
     const onSubmit = data => {
         console.log(data)
+        createUser(data.email,data.password)
+        .then(res =>{
+            const loggedUser = res.user;
+            console.log(loggedUser)
+        })
     }
 
     console.log(watch("example"))
@@ -44,8 +54,7 @@ const Singup = () => {
                                 <label className="label">
                                     <span className="label-text">Password</span>
                                 </label>
-                                <input type="password" placeholder="password" {...register("password",{ required: true, maxLength: 20 , pattern: /^[A-Za-z]+$/i})} name='password' className="input input-bordered"  />
-                                {errors.password && <span className="text-red-400">This field is required</span>}
+                                <input type="password" placeholder="password" {...register("password")} name='password' className="input input-bordered"  />
                                 <label className="label">
                                     <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
                                 </label>
@@ -55,6 +64,7 @@ const Singup = () => {
                            <input className='btn btn-primary' type="submit" value="Sing up" />
                        </div>
                        <p><small>All Ready Have an Account <Link to='/login'>Sing in</Link></small></p>
+                       <SocialLogin></SocialLogin>
                         </form>
                     </div>
                 </div>
