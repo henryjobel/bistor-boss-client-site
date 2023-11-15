@@ -2,16 +2,43 @@ import { useContext } from "react";
 import { AuthContext } from './../../Providers/AuthProvider';
 import Swal from "sweetalert2";
 import { useLocation, useNavigate } from "react-router-dom";
+import useAxiosSceure from "../Hoocks/useAxiosSceure";
+import useCart from "../Hoocks/useCart";
+
 
 
 const FoodCard = ({item}) => {
-    const {image , price , name , recipe} = item;
+    const {image , price , name , recipe,_id} = item;
     const {user} = useContext(AuthContext)
     const naviGtae = useNavigate();
     const location = useLocation();
-    const handleAddToCart = food =>{
+    const aciosSceure = useAxiosSceure()
+    const [,refetch] = useCart();
+    // eslint-disable-next-line no-unused-vars
+    const handleAddToCart = ()=>{
         if(user && user.email){
             // todo
+            const cartItem = {
+                menuId: _id,
+                email: user.email,
+                name,
+                image,
+                price
+            }
+            aciosSceure.post('/carts',cartItem)
+            .then(res =>{
+                if(res.data.insertedId){
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: `${name} added to the cart`,
+                        showConfirmButton: false,
+                        timer: 1500
+                      });
+                    //   refetch the card
+                    refetch();
+                }
+            })
         }
         else{
 
