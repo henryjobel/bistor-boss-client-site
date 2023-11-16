@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 // eslint-disable-next-line react/prop-types, no-unused-vars
 import React, { createContext, useEffect, useState } from 'react';
-import { GoogleAuthProvider,createUserWithEmailAndPassword,onAuthStateChanged,signInWithEmailAndPassword,signInWithPopup, signOut } from "firebase/auth";
+import { GoogleAuthProvider,createUserWithEmailAndPassword,onAuthStateChanged,signInWithEmailAndPassword,signInWithPopup, signOut, updateProfile } from "firebase/auth";
 import { getAuth } from "firebase/auth";
 import { app } from '../config/firebaseConfig';
 
@@ -33,6 +33,11 @@ const AuthProvider = ({children}) => {
         setLoder(true)
         return signOut(auth);
     }
+    const updateUserProfile = (name, photo) => {
+        return updateProfile(auth.currentUser, {
+            displayName: name, photoURL: photo
+        });
+    }
     useEffect(() => {
         const unSubscribe = onAuthStateChanged(auth, currentUser => {
             setUser(currentUser);
@@ -51,6 +56,7 @@ const AuthProvider = ({children}) => {
         createUser,
         singIn,
         singOut,
+        updateUserProfile,
         loader
        
     }
