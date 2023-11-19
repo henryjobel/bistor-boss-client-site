@@ -1,4 +1,4 @@
-import  { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 import { AuthContext } from '../../Providers/AuthProvider';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -7,18 +7,10 @@ import SocialLogin from '../../SocialLogin/SocialLigin';
 import Swal from 'sweetalert2';
 const LOgin = () => {
 
-    const captchaRef = useRef(null)
-    const [disabled, setDisabled] = useState(true)
-
+    const [disabled, setDisabled] = useState(true);
+    const { signIn } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
-
-    const { singIn } = useContext(AuthContext)
-
-    useEffect(() => {
-        loadCaptchaEnginge(6);
-    }, [])
-
 
     const from = location.state?.from?.pathname || "/";
     console.log('state in the location login page', location.state)
@@ -33,7 +25,7 @@ const LOgin = () => {
         const email = form.email.value;
         const password = form.password.value;
         console.log(email, password);
-        singIn(email, password)
+        signIn(email, password)
             .then(result => {
                 const user = result.user;
                 console.log(user);
@@ -49,18 +41,17 @@ const LOgin = () => {
                 navigate(from, { replace: true });
             })
     }
-    const validedCaptcher = () => {
-        const user_captcha_value = captchaRef.current.value;
-        console.log(user_captcha_value)
-        if (validateCaptcha(user_captcha_value)) {
-            setDisabled(false)
 
+    const handleValidateCaptcha = (e) => {
+        const user_captcha_value = e.target.value;
+        if (validateCaptcha(user_captcha_value)) {
+            setDisabled(false);
         }
         else {
             setDisabled(true)
         }
-
     }
+
     return (
         <>
             <Helmet>
@@ -93,7 +84,7 @@ const LOgin = () => {
                                 <label className="label">
                                     <LoadCanvasTemplate />
                                 </label>
-                                <input onBlur={validedCaptcher} type="text" name="captcha" placeholder="type the captcha above" className="input input-bordered" />
+                                <input onBlur={handleValidateCaptcha} type="text" name="captcha" placeholder="type the captcha above" className="input input-bordered" />
 
                             </div>
                             <div className="form-control mt-6">
@@ -101,7 +92,7 @@ const LOgin = () => {
                                 <input disabled={false} className="btn btn-primary" type="submit" value="Login" />
                             </div>
                         </form>
-                        <p className='px-6'><small>New Here? <Link to="/register">Create an account</Link> </small></p>
+                        <p className='px-6'><small>New Here? <Link to="/signup">Create an account</Link> </small></p>
                         <SocialLogin></SocialLogin>
                     </div>
                 </div>
