@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect,  useState } from 'react';
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 import { AuthContext } from '../../Providers/AuthProvider';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 const LOgin = () => {
 
     const [disabled, setDisabled] = useState(true);
-    const { signIn } = useContext(AuthContext);
+    const { singIn } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -25,7 +25,7 @@ const LOgin = () => {
         const email = form.email.value;
         const password = form.password.value;
         console.log(email, password);
-        signIn(email, password)
+        singIn(email, password)
             .then(result => {
                 const user = result.user;
                 console.log(user);
@@ -92,7 +92,7 @@ const LOgin = () => {
                                 <input disabled={false} className="btn btn-primary" type="submit" value="Login" />
                             </div>
                         </form>
-                        <p className='px-6'><small>New Here? <Link to="/signup">Create an account</Link> </small></p>
+                        <p className='px-6'><small>New Here? <Link to="/register">Create an account</Link> </small></p>
                         <SocialLogin></SocialLogin>
                     </div>
                 </div>
